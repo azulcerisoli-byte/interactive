@@ -1,120 +1,179 @@
 /* =========================================
-   1. CONFIGURACIÓN DEL "ESCENARIO" 3D
+   1. CONFIGURACIÓN GENERAL
 ========================================= */
 body, html {
     margin: 0;
     padding: 0;
     height: 100%;
-    overflow: hidden; /* Oculta el scroll general del body */
-    background-color: #050505;
-    color: white;
-    font-family: 'Times New Roman', Times, serif; /* Tipografía clásica/artística */
-}
-
-/* Contenedor principal que activa la cámara 3D */
-.parallax-container {
-    perspective: 1px; /* Crea la profundidad de campo */
-    height: 100vh;
-    overflow-x: hidden;
-    overflow-y: auto; /* El scroll sucede internamente aquí */
+    overflow: hidden;
+    background-color: #fdfdfd; /* Fondo casi blanco, aporta delicadeza */
+    color: #5d4263; /* Color de texto malva/cuarzo oscuro */
+    font-family: 'Times New Roman', Times, serif; /* Tipografía elegante y clásica */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* =========================================
-   2. DEFINICIÓN DE CAPAS PARALLAX
+   2. HEADER Y LOGO
 ========================================= */
-.parallax-layer {
-    position: absolute;
-    top: 0; right: 0; bottom: 0; left: 0;
+header {
+    width: 100%;
+    padding: 20px 0;
+    text-align: center;
+    background-color: rgba(253, 253, 253, 0.95);
+    z-index: 100;
+}
+
+header img {
+    max-height: 50px;
+}
+
+/* =========================================
+   3. CONTENEDOR DEL CARRUSEL
+========================================= */
+.carrusel-container {
+    flex: 1;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    pointer-events: none; /* Permite hacer clic a través de las capas */
-}
-
-/* --- CAPA 1: EL FONDO PROFUNDO (MÁS LENTO) --- */
-.layer-bg {
-    transform: translateZ(-2px) scale(3); /* Se aleja y se agranda para cubrir la pantalla */
-    z-index: 1;
-    background-image: 
-        linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.5)),
-        url('https://images.unsplash.com/photo-1547153760-18fc86324498?q=80&w=1600'); 
-    background-size: cover;
-    background-position: center;
-}
-
-/* --- CAPA 2: EL TEXTO EVOCADOR (VELOCIDAD MEDIA) --- */
-.layer-text {
-    transform: translateZ(-1px) scale(2); /* Profundidad intermedia */
-    z-index: 2;
-    text-align: center;
-}
-
-.layer-text h1 {
-    font-size: 8rem;
-    text-transform: uppercase;
-    letter-spacing: 20px;
-    opacity: 0.2; /* Efecto semitransparente / fantasma */
-    margin: 0;
-}
-
-/* --- CAPA 3: LA FIGURA HUMANA (VELOCIDAD NORMAL) --- */
-.layer-dancer {
-    transform: translateZ(0); /* Primer plano, se mueve con el scroll normal */
-    z-index: 3;
-    mix-blend-mode: screen; /* Fusión artística de luces con el fondo */
-}
-
-.layer-dancer img {
-    max-height: 80vh;
-    filter: grayscale(100%) brightness(1.2);
-    /* Degradado para desvanecer la parte inferior de la imagen */
-    mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+    perspective: 1000px; /* Le da profundidad al espacio 3D */
+    overflow: hidden;
+    position: relative;
 }
 
 /* =========================================
-   3. SECCIÓN DE CONTENIDO (FUERA DEL 3D)
+   4. ELEMENTOS DEL CARRUSEL Y ANIMACIONES
 ========================================= */
-.content-section {
-    position: relative;
-    z-index: 10; /* Se asegura de pasar por encima del escenario parallax */
-    background: #050505;
-    padding: 100px 10%;
-    margin-top: 100vh; /* Empuja el contenido para que empiece después de la portada */
-}
-
-.content-section h2 {
-    font-size: 3rem;
-    border-bottom: 1px solid rgba(255,255,255,0.2);
-    padding-bottom: 20px;
-    margin-bottom: 40px;
-    font-weight: normal;
-}
-
-.grid-conceptos {
+.carrusel-item {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    transform-style: preserve-3d;
+    transition: transform 1s ease, opacity 1s ease;
+    opacity: 0; /* Inician invisibles */
+    pointer-events: none; 
     display: flex;
-    gap: 40px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-.concepto {
-    flex: 1;
-    padding: 20px;
-    border-left: 1px solid rgba(255,255,255,0.1);
-    transition: 0.3s; /* Transición suave para el hover */
+/* Clase que se añade con JS para mostrar el elemento actual */
+.active {
+    opacity: 1;
+    transform: translateZ(100px); /* Se acerca hacia la pantalla */
+    pointer-events: auto;
 }
 
-.concepto:hover {
-    background: rgba(255,255,255,0.03);
-    border-left-color: white; /* Ilumina el borde izquierdo al pasar el mouse */
+/* --- Marcadores visuales (El "Cuarzo" y la "Bailarina") --- */
+.quartz-facets {
+    width: 200px;
+    height: 200px;
+    background-color: #fcf6ff;
+    border-radius: 50%;
+    border: 2px solid #e2cfe6;
+    box-shadow: 0 0 20px rgba(226, 207, 230, 0.5); /* Resplandor suave */
+    margin-bottom: 20px;
+    position: relative;
 }
 
-.concepto h3 { 
-    font-size: 1.5rem; 
-    margin-bottom: 15px; 
+.dancer-silhouette {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 150px;
+    height: 150px;
+    background-color: #e2cfe6;
+    border-radius: 50%;
+    opacity: 0.5;
+    transition: opacity 1s ease, transform 1s ease;
 }
 
-.concepto p { 
-    line-height: 1.8; 
-    color: #ccc; 
+.active .dancer-silhouette {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1); /* Efecto de "respiración" al activarse */
+}
+
+/* =========================================
+   5. NAVEGACIÓN (BOTONES LATERALES)
+========================================= */
+.nav-buttons {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 5%;
+    z-index: 10;
+    box-sizing: border-box; /* Evita que el padding desborde el ancho */
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    font-size: 3rem;
+    color: #d8c3df;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.nav-btn:hover {
+    color: #5d4263; /* Se oscurecen al pasar el mouse */
+}
+
+/* =========================================
+   6. TEXTO DINÁMICO DE LAS DISCIPLINAS
+========================================= */
+.discipline-text {
+    text-align: center;
+    opacity: 0;
+    transition: opacity 1s ease, transform 1s ease;
+    transform: translateY(20px); /* Empieza un poco más abajo */
+}
+
+.active .discipline-text {
+    opacity: 1;
+    transform: translateY(0); /* Sube a su posición original */
+}
+
+.discipline-text h2 {
+    font-size: 2.5rem;
+    font-weight: normal;
+    margin-bottom: 10px;
+}
+
+.discipline-text p {
+    font-size: 1rem;
     font-style: italic;
+    color: #a68ba7;
+}
+
+/* =========================================
+   7. EFECTO DE BARRIDO ETÉREO
+========================================= */
+.sweep-effect::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(226, 207, 230, 0.8); /* Color del "barrido" */
+    opacity: 0;
+    transition: opacity 1s ease;
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* Se activa la animación al cambiar de diapositiva */
+.active.sweep-effect::before {
+    animation: sweepAnimation 1s forwards;
+}
+
+@keyframes sweepAnimation {
+    0% { opacity: 0.8; transform: translateX(-100%); }
+    100% { opacity: 0; transform: translateX(0); }
 }
