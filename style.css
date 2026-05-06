@@ -1,179 +1,128 @@
 /* =========================================
-   1. CONFIGURACIÓN GENERAL
+   CONFIGURACIÓN Y ESTÉTICA DELICADA
 ========================================= */
 body, html {
     margin: 0;
     padding: 0;
     height: 100%;
+    background-color: #fdfdfd; /* Fondo casi blanco */
+    font-family: 'Times New Roman', Times, serif;
+    color: #7a5a6b; /* Tono delicado, inspirado en la imagen */
     overflow: hidden;
-    background-color: #fdfdfd; /* Fondo casi blanco, aporta delicadeza */
-    color: #5d4263; /* Color de texto malva/cuarzo oscuro */
-    font-family: 'Times New Roman', Times, serif; /* Tipografía elegante y clásica */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
-/* =========================================
-   2. HEADER Y LOGO
-========================================= */
 header {
-    width: 100%;
-    padding: 20px 0;
     text-align: center;
-    background-color: rgba(253, 253, 253, 0.95);
-    z-index: 100;
-}
-
-header img {
-    max-height: 50px;
-}
-
-/* =========================================
-   3. CONTENEDOR DEL CARRUSEL
-========================================= */
-.carrusel-container {
-    flex: 1;
+    padding: 40px 0;
+    position: absolute;
     width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    perspective: 1000px; /* Le da profundidad al espacio 3D */
-    overflow: hidden;
-    position: relative;
-}
-
-/* =========================================
-   4. ELEMENTOS DEL CARRUSEL Y ANIMACIONES
-========================================= */
-.carrusel-item {
-    position: absolute;
-    width: 300px;
-    height: 300px;
-    transform-style: preserve-3d;
-    transition: transform 1s ease, opacity 1s ease;
-    opacity: 0; /* Inician invisibles */
-    pointer-events: none; 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-/* Clase que se añade con JS para mostrar el elemento actual */
-.active {
-    opacity: 1;
-    transform: translateZ(100px); /* Se acerca hacia la pantalla */
-    pointer-events: auto;
-}
-
-/* --- Marcadores visuales (El "Cuarzo" y la "Bailarina") --- */
-.quartz-facets {
-    width: 200px;
-    height: 200px;
-    background-color: #fcf6ff;
-    border-radius: 50%;
-    border: 2px solid #e2cfe6;
-    box-shadow: 0 0 20px rgba(226, 207, 230, 0.5); /* Resplandor suave */
-    margin-bottom: 20px;
-    position: relative;
-}
-
-.dancer-silhouette {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 150px;
-    height: 150px;
-    background-color: #e2cfe6;
-    border-radius: 50%;
-    opacity: 0.5;
-    transition: opacity 1s ease, transform 1s ease;
-}
-
-.active .dancer-silhouette {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1.1); /* Efecto de "respiración" al activarse */
-}
-
-/* =========================================
-   5. NAVEGACIÓN (BOTONES LATERALES)
-========================================= */
-.nav-buttons {
-    position: absolute;
-    top: 50%;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    padding: 0 5%;
-    z-index: 10;
-    box-sizing: border-box; /* Evita que el padding desborde el ancho */
-}
-
-.nav-btn {
-    background: none;
-    border: none;
-    font-size: 3rem;
-    color: #d8c3df;
-    cursor: pointer;
-    transition: color 0.3s ease;
-}
-
-.nav-btn:hover {
-    color: #5d4263; /* Se oscurecen al pasar el mouse */
-}
-
-/* =========================================
-   6. TEXTO DINÁMICO DE LAS DISCIPLINAS
-========================================= */
-.discipline-text {
-    text-align: center;
-    opacity: 0;
-    transition: opacity 1s ease, transform 1s ease;
-    transform: translateY(20px); /* Empieza un poco más abajo */
-}
-
-.active .discipline-text {
-    opacity: 1;
-    transform: translateY(0); /* Sube a su posición original */
-}
-
-.discipline-text h2 {
-    font-size: 2.5rem;
-    font-weight: normal;
-    margin-bottom: 10px;
-}
-
-.discipline-text p {
-    font-size: 1rem;
-    font-style: italic;
-    color: #a68ba7;
-}
-
-/* =========================================
-   7. EFECTO DE BARRIDO ETÉREO
-========================================= */
-.sweep-effect::before {
-    content: '';
-    position: absolute;
     top: 0;
-    left: 0;
+    z-index: 10;
+}
+
+.logo {
+    font-size: 3rem;
+    font-weight: normal;
+    margin: 0;
+}
+
+/* =========================================
+   CONTENEDOR DEL CARRUSEL
+========================================= */
+.carousel {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.slide {
+    display: none; /* Oculto por defecto */
+    position: absolute;
     width: 100%;
     height: 100%;
-    background-color: rgba(226, 207, 230, 0.8); /* Color del "barrido" */
-    opacity: 0;
-    transition: opacity 1s ease;
-    pointer-events: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.slide.active {
+    display: flex;
+}
+
+/* =========================================
+   EL BARRIDO DE LA BAILARINA
+========================================= */
+.dancer {
+    position: absolute;
+    top: 0;
+    left: -100vw; /* Inicia escondida a la izquierda de la pantalla */
+    width: 100vw;
+    height: 100vh;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: contain; 
     z-index: 5;
 }
 
-/* Se activa la animación al cambiar de diapositiva */
-.active.sweep-effect::before {
-    animation: sweepAnimation 1s forwards;
+/* La animación ejecuta el barrido al cambiar de slide */
+.slide.active .dancer {
+    animation: sweepDancer 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-@keyframes sweepAnimation {
-    0% { opacity: 0.8; transform: translateX(-100%); }
-    100% { opacity: 0; transform: translateX(0); }
+@keyframes sweepDancer {
+    0% { left: -100vw; }     /* Empieza fuera */
+    40% { left: 0; }         /* Cruza por el centro */
+    100% { left: 100vw; }    /* Termina fuera por la derecha */
 }
+
+/* Aquí debes poner los nombres de los archivos PNG (sin fondo) de tus bailarinas */
+.dancer-clasico { background-image: url('bailarina1.png'); }
+.dancer-jazz { background-image: url('bailarina2.png'); }
+.dancer-contemporaneo { background-image: url('bailarina3.png'); }
+.dancer-heels { background-image: url('bailarina4.png'); }
+
+/* =========================================
+   TEXTO DE LA DISCIPLINA
+========================================= */
+.discipline {
+    font-size: 5rem;
+    font-weight: normal;
+    z-index: 1;
+    opacity: 0; /* Inicia invisible */
+}
+
+/* Aparece exactamente cuando la bailarina va pasando por encima (retraso de 0.8s) */
+.slide.active .discipline {
+    animation: revealText 1s ease forwards;
+    animation-delay: 0.8s; 
+}
+
+@keyframes revealText {
+    0% { opacity: 0; filter: blur(10px); }
+    100% { opacity: 1; filter: blur(0px); }
+}
+
+/* =========================================
+   BOTONES DE NAVEGACIÓN
+========================================= */
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    font-size: 4rem;
+    color: #d1b8c8;
+    cursor: pointer;
+    z-index: 20;
+    padding: 0 40px;
+    transition: color 0.3s;
+}
+
+.nav-btn:hover {
+    color: #7a5a6b;
+}
+
+#prevBtn { left: 0; }
+#nextBtn { right: 0; }
