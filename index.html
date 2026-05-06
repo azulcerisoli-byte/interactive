@@ -4,11 +4,151 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Academia Cuarzo | Interfaz Interactiva</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,700;1,300&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="estilo.css">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;700&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- TODO EL CSS AQUÍ PARA QUE NO FALLE --- */
+        :root {
+            --cuarzo-bg: #fdfdfd;
+            --cuarzo-text: #7a5a6b;
+            --cuarzo-accent: #d1b8c8;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: var(--cuarzo-bg);
+            font-family: 'Montserrat', sans-serif;
+            overflow: hidden;
+        }
+
+        /* Logo Estático */
+        .header-static {
+            position: absolute;
+            top: 40px;
+            width: 100%;
+            text-align: center;
+            z-index: 100;
+        }
+
+        .header-static h1 {
+            font-family: 'Merriweather', serif;
+            color: var(--cuarzo-text);
+            font-weight: 300;
+            font-size: 28px;
+            letter-spacing: 5px;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        /* Contenedor del Carrusel */
+        .carousel-viewport {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .discipline-slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: none; /* Oculto por defecto */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .discipline-slide.active {
+            display: flex; /* Se muestra solo el activo */
+        }
+
+        /* Texto de la Disciplina (Aparece recto y centrado) */
+        .discipline-name {
+            font-family: 'Merriweather', serif;
+            font-size: clamp(3rem, 8vw, 6rem); /* Se adapta al tamaño de pantalla */
+            color: var(--cuarzo-text);
+            text-align: center;
+            z-index: 5; /* Detrás del bailarín */
+            font-weight: 300;
+            opacity: 0;
+            filter: blur(15px);
+        }
+
+        /* Animación del texto */
+        .active .discipline-name {
+            animation: textReveal 1s ease forwards;
+            animation-delay: 0.8s; /* Espera a que el bailarín pase por el centro */
+        }
+
+        @keyframes textReveal {
+            0% { opacity: 0; filter: blur(15px); transform: scale(0.95); }
+            100% { opacity: 1; filter: blur(0px); transform: scale(1); }
+        }
+
+        /* El Bailarín (El Barrido) */
+        .dancer-sweep {
+            position: absolute;
+            top: 0;
+            left: -100vw;
+            width: 100vw;
+            height: 100vh;
+            z-index: 10; /* Por delante del texto */
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            pointer-events: none;
+        }
+
+        /* Animación del barrido */
+        .active .dancer-sweep {
+            animation: sweepPass 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes sweepPass {
+            0% { left: -100vw; }
+            50% { opacity: 1; }
+            100% { left: 100vw; }
+        }
+
+        /* RUTAS DE IMÁGENES (Reemplaza con tus archivos .png) */
+        .ballet { background-image: url('clasico.png'); }
+        .jazz { background-image: url('jazz.png'); }
+        .contempo { background-image: url('contemporaneo.png'); }
+        .heels { background-image: url('heels.png'); }
+
+        /* Controles */
+        .nav-controls {
+            position: absolute;
+            bottom: 50px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            background: none;
+            border: 1px solid var(--cuarzo-accent);
+            color: var(--cuarzo-text);
+            padding: 12px 30px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.3s;
+        }
+
+        .nav-btn:hover {
+            background-color: var(--cuarzo-accent);
+            color: white;
+        }
+    </style>
 </head>
 <body>
 
@@ -17,23 +157,22 @@
     </header>
 
     <div class="carousel-viewport">
-        
-        <div class="discipline-slide active" id="slide0">
+        <div class="discipline-slide active">
             <div class="dancer-sweep ballet"></div>
             <div class="discipline-name">Clásico Inicial</div>
         </div>
 
-        <div class="discipline-slide" id="slide1">
+        <div class="discipline-slide">
             <div class="dancer-sweep jazz"></div>
             <div class="discipline-name">Jazz Fusion</div>
         </div>
 
-        <div class="discipline-slide" id="slide2">
+        <div class="discipline-slide">
             <div class="dancer-sweep contempo"></div>
             <div class="discipline-name">Contemporáneo</div>
         </div>
 
-        <div class="discipline-slide" id="slide3">
+        <div class="discipline-slide">
             <div class="dancer-sweep heels"></div>
             <div class="discipline-name">Heels</div>
         </div>
@@ -45,22 +184,18 @@
     </div>
 
     <script>
-        let currentSlide = 0;
+        let current = 0;
         const slides = document.querySelectorAll('.discipline-slide');
 
-        function moveSlide(direction) {
-            // Quitamos la clase activa de la diapositiva actual
-            slides[currentSlide].classList.remove('active');
+        function moveSlide(dir) {
+            slides[current].classList.remove('active');
+            current = (current + dir + slides.length) % slides.length;
             
-            // Calculamos cuál es la siguiente diapositiva
-            currentSlide = (currentSlide + direction + slides.length) % slides.length;
-            
-            // Un pequeño retraso para que la animación se reinicie correctamente
+            // Forzamos el reinicio de la animación
             setTimeout(() => {
-                slides[currentSlide].classList.add('active');
-            }, 10);
+                slides[current].classList.add('active');
+            }, 50);
         }
     </script>
-
 </body>
 </html>
