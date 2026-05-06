@@ -3,43 +3,257 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Academia Metafórica | El Movimiento</title>
-    
-    <link rel="stylesheet" href="style.css">
+    <title>Academia Cuarzo | Movimiento Etéreo</title>
+    <style>
+        /* --- CONFIGURACIÓN GENERAL --- */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            background-color: #fdfdfd; /* Fondo casi blanco */
+            color: #5d4263; /* Color de texto malva delicado */
+            font-family: 'Times New Roman', Times, serif; /* Tipografía elegante */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- HEADER Y LOGO --- */
+        header {
+            width: 100%;
+            padding: 20px 0;
+            text-align: center;
+            background-color: rgba(253, 253, 253, 0.95);
+            z-index: 100;
+        }
+
+        header img {
+            max-height: 50px;
+        }
+
+        /* --- CARRUSEL CENTRAL METAFÓRICO --- */
+        .carrusel-container {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 1000px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Objeto central dinámico (Cristal de Cuarzo y Bailarina Etérea) */
+        .carrusel-item {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            transform-style: preserve-3d;
+            transition: transform 1s ease, opacity 1s ease;
+            opacity: 0;
+            pointer-events: none; /* Dejamos pasar clics al fondo si es necesario */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .active {
+            opacity: 1;
+            transform: translateZ(100px);
+            pointer-events: auto;
+        }
+
+        /* Marcador de posición para el cristal de cuarzo central */
+        .quartz-facets {
+            width: 200px;
+            height: 200px;
+            background-color: #fcf6ff;
+            border-radius: 50%;
+            border: 2px solid #e2cfe6;
+            box-shadow: 0 0 20px rgba(226, 207, 230, 0.5);
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        /* Marcador de posición para la silueta etérea del bailarín */
+        .dancer-silhouette {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 150px;
+            height: 150px;
+            background-color: #e2cfe6;
+            border-radius: 50%;
+            opacity: 0.5;
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .active .dancer-silhouette {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        /* --- NAVEGACIÓN Y TEXTO DINÁMICO --- */
+        .nav-buttons {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 5%;
+            z-index: 10;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            font-size: 3rem;
+            color: #d8c3df;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            color: #5d4263;
+        }
+
+        /* Texto de la disciplina (animación de escritura) */
+        .discipline-text {
+            text-align: center;
+            opacity: 0;
+            transition: opacity 1s ease, transform 1s ease;
+            transform: translateY(20px);
+        }
+
+        .active .discipline-text {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .discipline-text h2 {
+            font-size: 2.5rem;
+            font-weight: normal;
+            margin-bottom: 10px;
+        }
+
+        .discipline-text p {
+            font-size: 1rem;
+            font-style: italic;
+            color: #a68ba7;
+        }
+
+        /* --- EFECTO DE BARRIDO DE LA BAILARINA (USO DE PSEUDO-ELEMENTOS) --- */
+        .sweep-effect::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(226, 207, 230, 0.8);
+            opacity: 0;
+            transition: opacity 1s ease;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .active.sweep-effect::before {
+            animation: sweepAnimation 1s forwards;
+        }
+
+        @keyframes sweepAnimation {
+            0% { opacity: 0.8; transform: translateX(-100%); }
+            100% { opacity: 0; transform: translateX(0); }
+        }
+
+    </style>
 </head>
 <body>
 
-    <div class="parallax-container">
-        
-        <div class="parallax-layer layer-bg"></div>
+    <header>
+        <img src="https://via.placeholder.com/150x50?text=Academia+Cuarzo" alt="Logo Academia Cuarzo">
+    </header>
 
-        <div class="parallax-layer layer-text">
-            <h1>RITMO</h1>
-        </div>
-
-        <div class="parallax-layer layer-dancer">
-            <img src="https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?q=80&w=800" alt="Bailarina">
-        </div>
-
-        <div class="content-section">
-            <h2>NUESTRA FILOSOFÍA</h2>
-            <div class="grid-conceptos">
-                <div class="concepto">
-                    <h3>EL CUERPO</h3>
-                    <p>"Buscamos la consciencia de cada músculo, convirtiendo la anatomía en un instrumento de expresión pura."</p>
-                </div>
-                <div class="concepto">
-                    <h3>EL ESPACIO</h3>
-                    <p>"No solo nos movemos en el escenario, esculpimos el aire a nuestro alrededor con cada coreografía."</p>
-                </div>
-                <div class="concepto">
-                    <h3>EL TIEMPO</h3>
-                    <p>"Domina el silencio entre los beats. Bailar es controlar el flujo del tiempo con el movimiento."</p>
-                </div>
+    <div class="carrusel-container">
+        <div class="carrusel-item active sweep-effect" id="carrusel-item-0">
+            <div class="quartz-facets">
+                <div class="dancer-silhouette"></div>
+            </div>
+            <div class="discipline-text">
+                <h2>Clásico Inicial</h2>
+                <p>La base de la elegancia. La fuerza del cuerpo.</p>
             </div>
         </div>
 
+        <div class="carrusel-item" id="carrusel-item-1">
+            <div class="quartz-facets">
+                <div class="dancer-silhouette" style="background-color: #f7e6d7;"></div>
+            </div>
+            <div class="discipline-text">
+                <h2>Jazz Fusion</h2>
+                <p>La energía del ritmo. La explosión del movimiento.</p>
+            </div>
+        </div>
+
+        <div class="carrusel-item" id="carrusel-item-2">
+            <div class="quartz-facets">
+                <div class="dancer-silhouette" style="background-color: #d1e4e3;"></div>
+            </div>
+            <div class="discipline-text">
+                <h2>Contemporáneo</h2>
+                <p>La libertad de expresión. La profundidad de la emoción.</p>
+            </div>
+        </div>
+
+        <div class="carrusel-item" id="carrusel-item-3">
+            <div class="quartz-facets">
+                <div class="dancer-silhouette" style="background-color: #fce4dc;"></div>
+            </div>
+            <div class="discipline-text">
+                <h2>Heels</h2>
+                <p>La sofisticación del estilo. La fuerza de la feminidad.</p>
+            </div>
+        </div>
+
+        <div class="nav-buttons">
+            <button class="nav-btn prev" id="prevBtn">&#8249;</button>
+            <button class="nav-btn next" id="nextBtn">&#8250;</button>
+        </div>
     </div>
+
+    <script>
+        const carruselItems = document.querySelectorAll('.carrusel-item');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        let currentItem = 0;
+
+        function updateCarrusel() {
+            carruselItems.forEach((item, index) => {
+                if (index === currentItem) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        prevBtn.addEventListener('click', () => {
+            currentItem = (currentItem - 1 + carruselItems.length) % carruselItems.length;
+            updateCarrusel();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentItem = (currentItem + 1) % carruselItems.length;
+            updateCarrusel();
+        });
+
+        // Inicializar el carrusel
+        updateCarrusel();
+
+    </script>
 
 </body>
 </html>
