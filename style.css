@@ -1,128 +1,165 @@
 /* =========================================
-   CONFIGURACIÓN Y ESTÉTICA DELICADA
+   1. CONFIGURACIÓN GENERAL
 ========================================= */
+:root {
+    --cuarzo-bg: #fdfdfd;      /* Fondo casi blanco */
+    --cuarzo-text: #7a5a6b;    /* Color del texto delicado */
+    --cuarzo-accent: #d1b8c8;  /* Color de los botones al pasar el mouse */
+}
+
 body, html {
     margin: 0;
     padding: 0;
     height: 100%;
-    background-color: #fdfdfd; /* Fondo casi blanco */
-    font-family: 'Times New Roman', Times, serif;
-    color: #7a5a6b; /* Tono delicado, inspirado en la imagen */
-    overflow: hidden;
-}
-
-header {
-    text-align: center;
-    padding: 40px 0;
-    position: absolute;
-    width: 100%;
-    top: 0;
-    z-index: 10;
-}
-
-.logo {
-    font-size: 3rem;
-    font-weight: normal;
-    margin: 0;
+    background-color: var(--cuarzo-bg);
+    font-family: 'Montserrat', sans-serif;
+    overflow: hidden; /* Evita que aparezca la barra de scroll */
 }
 
 /* =========================================
-   CONTENEDOR DEL CARRUSEL
+   2. HEADER LOGO ESTÁTICO
 ========================================= */
-.carousel {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+.header-static {
+    position: absolute;
+    top: 40px;
+    width: 100%;
+    text-align: center;
+    z-index: 100;
 }
 
-.slide {
-    display: none; /* Oculto por defecto */
+.header-static h1 {
+    font-family: 'Merriweather', serif;
+    color: var(--cuarzo-text);
+    font-weight: 300;
+    font-size: 32px;
+    letter-spacing: 5px;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+/* =========================================
+   3. CONTENEDOR DEL CARRUSEL
+========================================= */
+.carousel-viewport {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.discipline-slide {
     position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    align-items: center;
+    display: flex;
     justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease;
 }
 
-.slide.active {
-    display: flex;
+.discipline-slide.active {
+    opacity: 1;
+    visibility: visible;
 }
 
 /* =========================================
-   EL BARRIDO DE LA BAILARINA
+   4. TEXTO DE LA DISCIPLINA (POR DETRÁS)
 ========================================= */
-.dancer {
+.discipline-name {
+    font-family: 'Merriweather', serif;
+    font-size: 84px;
+    color: var(--cuarzo-text);
+    text-align: center;
+    z-index: 5; /* Z-index menor que el bailarín para que quede atrás */
+    font-weight: 300;
+    opacity: 0;
+    filter: blur(10px);
+    transform: scale(0.95);
+}
+
+/* Animación: el texto aparece recto y centrado tras el paso del bailarín */
+.active .discipline-name {
+    animation: textReveal 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    animation-delay: 0.7s; /* Espera a que el bailarín pase por el medio */
+}
+
+@keyframes textReveal {
+    0% { opacity: 0; filter: blur(10px); transform: scale(0.95); }
+    100% { opacity: 1; filter: blur(0px); transform: scale(1); }
+}
+
+/* =========================================
+   5. LA BAILARINA (EFECTO DE BARRIDO)
+========================================= */
+.dancer-sweep {
     position: absolute;
     top: 0;
-    left: -100vw; /* Inicia escondida a la izquierda de la pantalla */
+    left: -100vw; /* Inicia fuera de la pantalla por la izquierda */
     width: 100vw;
     height: 100vh;
+    z-index: 10; /* Z-index mayor para pasar por delante del texto */
+    background-size: contain;
     background-repeat: no-repeat;
-    background-position: center center;
-    background-size: contain; 
-    z-index: 5;
+    background-position: center;
+    pointer-events: none;
+    /* Sombra opcional para darle profundidad al recorte */
+    filter: drop-shadow(20px 0 30px rgba(209, 184, 200, 0.3));
 }
 
-/* La animación ejecuta el barrido al cambiar de slide */
-.slide.active .dancer {
-    animation: sweepDancer 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+/* Animación: cruza la pantalla de izquierda a derecha */
+.active .dancer-sweep {
+    animation: sweepPass 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
-@keyframes sweepDancer {
-    0% { left: -100vw; }     /* Empieza fuera */
-    40% { left: 0; }         /* Cruza por el centro */
-    100% { left: 100vw; }    /* Termina fuera por la derecha */
+@keyframes sweepPass {
+    0% { left: -100vw; opacity: 0; }
+    30% { opacity: 1; }
+    70% { opacity: 1; }
+    100% { left: 100vw; opacity: 0; }
 }
 
-/* Aquí debes poner los nombres de los archivos PNG (sin fondo) de tus bailarinas */
-.dancer-clasico { background-image: url('bailarina1.png'); }
-.dancer-jazz { background-image: url('bailarina2.png'); }
-.dancer-contemporaneo { background-image: url('bailarina3.png'); }
-.dancer-heels { background-image: url('bailarina4.png'); }
+/* ¡IMPORTANTE! 
+   Aquí debes poner la ruta de tus imágenes PNG sin fondo.
+   Sube tus imágenes a GitHub y reemplaza los nombres aquí.
+*/
+.ballet { background-image: url('clasico.png'); }
+.jazz { background-image: url('jazz.png'); }
+.contempo { background-image: url('contemporaneo.png'); }
+.heels { background-image: url('heels.png'); }
 
 /* =========================================
-   TEXTO DE LA DISCIPLINA
+   6. BOTONES DE NAVEGACIÓN
 ========================================= */
-.discipline {
-    font-size: 5rem;
-    font-weight: normal;
-    z-index: 1;
-    opacity: 0; /* Inicia invisible */
-}
-
-/* Aparece exactamente cuando la bailarina va pasando por encima (retraso de 0.8s) */
-.slide.active .discipline {
-    animation: revealText 1s ease forwards;
-    animation-delay: 0.8s; 
-}
-
-@keyframes revealText {
-    0% { opacity: 0; filter: blur(10px); }
-    100% { opacity: 1; filter: blur(0px); }
-}
-
-/* =========================================
-   BOTONES DE NAVEGACIÓN
-========================================= */
-.nav-btn {
+.nav-controls {
     position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: transparent;
-    border: none;
-    font-size: 4rem;
-    color: #d1b8c8;
+    bottom: 60px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    z-index: 100;
+}
+
+.nav-btn {
+    background: none;
+    border: 1px solid var(--cuarzo-accent);
+    color: var(--cuarzo-text);
+    padding: 10px 25px;
     cursor: pointer;
-    z-index: 20;
-    padding: 0 40px;
-    transition: color 0.3s;
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: all 0.3s ease;
+    font-size: 14px;
 }
 
 .nav-btn:hover {
-    color: #7a5a6b;
+    background-color: var(--cuarzo-accent);
+    color: #fff;
 }
-
-#prevBtn { left: 0; }
-#nextBtn { right: 0; }
