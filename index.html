@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Academia Cuarzo | Interfaz Interactiva</title>
+    <title>Academia Cuarzo | Código SVG</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;700&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
 
     <style>
-        /* --- TODO EL CSS AQUÍ PARA QUE NO FALLE --- */
         :root {
             --cuarzo-bg: #fdfdfd;
             --cuarzo-text: #7a5a6b;
@@ -26,7 +25,7 @@
             overflow: hidden;
         }
 
-        /* Logo Estático */
+        /* Header Estático */
         .header-static {
             position: absolute;
             top: 40px;
@@ -45,7 +44,6 @@
             text-transform: uppercase;
         }
 
-        /* Contenedor del Carrusel */
         .carousel-viewport {
             width: 100%;
             height: 100vh;
@@ -59,31 +57,31 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            display: none; /* Oculto por defecto */
+            display: none;
             justify-content: center;
             align-items: center;
         }
 
         .discipline-slide.active {
-            display: flex; /* Se muestra solo el activo */
+            display: flex;
         }
 
-        /* Texto de la Disciplina (Aparece recto y centrado) */
+        /* Texto de la Disciplina */
         .discipline-name {
             font-family: 'Merriweather', serif;
-            font-size: clamp(3rem, 8vw, 6rem); /* Se adapta al tamaño de pantalla */
+            font-size: clamp(3rem, 8vw, 6rem);
             color: var(--cuarzo-text);
             text-align: center;
-            z-index: 5; /* Detrás del bailarín */
+            z-index: 5;
             font-weight: 300;
             opacity: 0;
             filter: blur(15px);
+            position: absolute; /* Asegura que quede centrado estático */
         }
 
-        /* Animación del texto */
         .active .discipline-name {
             animation: textReveal 1s ease forwards;
-            animation-delay: 0.8s; /* Espera a que el bailarín pase por el centro */
+            animation-delay: 0.8s;
         }
 
         @keyframes textReveal {
@@ -91,36 +89,31 @@
             100% { opacity: 1; filter: blur(0px); transform: scale(1); }
         }
 
-        /* El Bailarín (El Barrido) */
-        .dancer-sweep {
+        /* =========================================
+           EL BAILARÍN DIBUJADO CON CÓDIGO (SVG)
+        ========================================= */
+        .dancer-code {
             position: absolute;
-            top: 0;
-            left: -100vw;
-            width: 100vw;
-            height: 100vh;
-            z-index: 10; /* Por delante del texto */
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
+            top: 50%;
+            left: -300px; /* Empieza fuera por la izquierda */
+            transform: translateY(-50%);
+            width: 400px; /* Tamaño del dibujo */
+            height: 400px;
+            z-index: 10;
             pointer-events: none;
         }
 
-        /* Animación del barrido */
-        .active .dancer-sweep {
-            animation: sweepPass 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        /* Animación del barrido para el SVG */
+        .active .dancer-code {
+            animation: sweepPass 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
 
         @keyframes sweepPass {
-            0% { left: -100vw; }
-            50% { opacity: 1; }
-            100% { left: 100vw; }
+            0% { left: -400px; opacity: 0;}
+            10% { opacity: 1;}
+            90% { opacity: 1;}
+            100% { left: 100vw; opacity: 0;}
         }
-
-        /* RUTAS DE IMÁGENES (Reemplaza con tus archivos .png) */
-        .ballet { background-image: url('clasico.png'); }
-        .jazz { background-image: url('jazz.png'); }
-        .contempo { background-image: url('contemporaneo.png'); }
-        .heels { background-image: url('heels.png'); }
 
         /* Controles */
         .nav-controls {
@@ -157,25 +150,69 @@
     </header>
 
     <div class="carousel-viewport">
+        
+        <!-- Slide 1 -->
         <div class="discipline-slide active">
-            <div class="dancer-sweep ballet"></div>
+            <!-- AQUÍ ESTÁ EL DIBUJO HECHO CON MATEMÁTICAS (SVG) -->
+            <svg class="dancer-code" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <g fill="#d1b8c8" opacity="0.8">
+                    <!-- Cabeza -->
+                    <circle cx="50" cy="15" r="4" />
+                    <!-- Brazos -->
+                    <path d="M50 20 Q 30 10 20 5 Q 35 15 50 23 Q 65 15 80 5 Q 70 10 50 20" />
+                    <!-- Torso y Falda (Tutú) -->
+                    <path d="M48 23 Q 45 40 15 55 Q 50 65 85 55 Q 55 40 52 23 Z" />
+                    <!-- Piernas -->
+                    <path d="M45 55 L 35 90 L 37 92 L 48 58 Z" />
+                    <path d="M55 55 L 60 85 L 62 84 L 52 58 Z" />
+                </g>
+            </svg>
             <div class="discipline-name">Clásico Inicial</div>
         </div>
 
+        <!-- Slide 2 -->
         <div class="discipline-slide">
-            <div class="dancer-sweep jazz"></div>
+            <svg class="dancer-code" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- Color ligeramente distinto para variar -->
+                <g fill="#c2a3b7" opacity="0.8">
+                    <circle cx="50" cy="15" r="4" />
+                    <path d="M50 20 Q 30 10 20 5 Q 35 15 50 23 Q 65 15 80 5 Q 70 10 50 20" />
+                    <path d="M48 23 Q 45 40 15 55 Q 50 65 85 55 Q 55 40 52 23 Z" />
+                    <path d="M45 55 L 35 90 L 37 92 L 48 58 Z" />
+                    <path d="M55 55 L 60 85 L 62 84 L 52 58 Z" />
+                </g>
+            </svg>
             <div class="discipline-name">Jazz Fusion</div>
         </div>
 
+        <!-- Slide 3 -->
         <div class="discipline-slide">
-            <div class="dancer-sweep contempo"></div>
+             <svg class="dancer-code" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <g fill="#b08d9e" opacity="0.8">
+                    <circle cx="50" cy="15" r="4" />
+                    <path d="M50 20 Q 30 10 20 5 Q 35 15 50 23 Q 65 15 80 5 Q 70 10 50 20" />
+                    <path d="M48 23 Q 45 40 15 55 Q 50 65 85 55 Q 55 40 52 23 Z" />
+                    <path d="M45 55 L 35 90 L 37 92 L 48 58 Z" />
+                    <path d="M55 55 L 60 85 L 62 84 L 52 58 Z" />
+                </g>
+            </svg>
             <div class="discipline-name">Contemporáneo</div>
         </div>
 
+        <!-- Slide 4 -->
         <div class="discipline-slide">
-            <div class="dancer-sweep heels"></div>
+             <svg class="dancer-code" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <g fill="#8f6a7d" opacity="0.8">
+                    <circle cx="50" cy="15" r="4" />
+                    <path d="M50 20 Q 30 10 20 5 Q 35 15 50 23 Q 65 15 80 5 Q 70 10 50 20" />
+                    <path d="M48 23 Q 45 40 15 55 Q 50 65 85 55 Q 55 40 52 23 Z" />
+                    <path d="M45 55 L 35 90 L 37 92 L 48 58 Z" />
+                    <path d="M55 55 L 60 85 L 62 84 L 52 58 Z" />
+                </g>
+            </svg>
             <div class="discipline-name">Heels</div>
         </div>
+
     </div>
 
     <div class="nav-controls">
@@ -191,7 +228,6 @@
             slides[current].classList.remove('active');
             current = (current + dir + slides.length) % slides.length;
             
-            // Forzamos el reinicio de la animación
             setTimeout(() => {
                 slides[current].classList.add('active');
             }, 50);
