@@ -3,65 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Academia Cuarzo</title>
+    <title>Academia Cuarzo | Interfaz Interactiva</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,700;1,300&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="estilo.css">
 </head>
 <body>
 
-    <header>
-        <h1 class="logo">Academia Cuarzo</h1>
+    <header class="header-static">
+        <h1>Academia Cuarzo</h1>
     </header>
 
-    <main class="carousel">
-        <div class="slide active">
-            <div class="dancer dancer-clasico"></div>
-            <h2 class="discipline">Clásico Inicial</h2>
-        </div>
+    <div class="carousel-viewport">
         
-        <div class="slide">
-            <div class="dancer dancer-jazz"></div>
-            <h2 class="discipline">Jazz Fusion</h2>
-        </div>
-        
-        <div class="slide">
-            <div class="dancer dancer-contemporaneo"></div>
-            <h2 class="discipline">Contemporáneo</h2>
-        </div>
-        
-        <div class="slide">
-            <div class="dancer dancer-heels"></div>
-            <h2 class="discipline">Heels</h2>
+        <div class="discipline-slide active" id="slide0">
+            <div class="dancer-sweep ballet"></div>
+            <div class="discipline-name">Clásico Inicial</div>
         </div>
 
-        <button id="prevBtn" class="nav-btn">&#8249;</button>
-        <button id="nextBtn" class="nav-btn">&#8250;</button>
-    </main>
+        <div class="discipline-slide" id="slide1">
+            <div class="dancer-sweep jazz"></div>
+            <div class="discipline-name">Jazz Fusion</div>
+        </div>
+
+        <div class="discipline-slide" id="slide2">
+            <div class="dancer-sweep contempo"></div>
+            <div class="discipline-name">Contemporáneo</div>
+        </div>
+
+        <div class="discipline-slide" id="slide3">
+            <div class="dancer-sweep heels"></div>
+            <div class="discipline-name">Heels</div>
+        </div>
+    </div>
+
+    <div class="nav-controls">
+        <button class="nav-btn" onclick="moveSlide(-1)">Anterior</button>
+        <button class="nav-btn" onclick="moveSlide(1)">Siguiente</button>
+    </div>
 
     <script>
-        const slides = document.querySelectorAll('.slide');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        let current = 0;
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.discipline-slide');
 
-        function updateSlide(newIndex) {
-            slides[current].classList.remove('active');
+        function moveSlide(direction) {
+            // Quitamos la clase activa de la diapositiva actual
+            slides[currentSlide].classList.remove('active');
             
-            // Este truco reinicia las animaciones de CSS al cambiar de diapositiva
-            void slides[newIndex].offsetWidth; 
+            // Calculamos cuál es la siguiente diapositiva
+            currentSlide = (currentSlide + direction + slides.length) % slides.length;
             
-            current = newIndex;
-            slides[current].classList.add('active');
+            // Un pequeño retraso para que la animación se reinicie correctamente
+            setTimeout(() => {
+                slides[currentSlide].classList.add('active');
+            }, 10);
         }
-
-        prevBtn.addEventListener('click', () => {
-            let newIndex = (current === 0) ? slides.length - 1 : current - 1;
-            updateSlide(newIndex);
-        });
-
-        nextBtn.addEventListener('click', () => {
-            let newIndex = (current === slides.length - 1) ? 0 : current + 1;
-            updateSlide(newIndex);
-        });
     </script>
 
 </body>
