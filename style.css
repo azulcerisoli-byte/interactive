@@ -1,5 +1,5 @@
 /* =========================================
-   1. CONFIGURACIÓN GENERAL
+   VARIABLES Y CONFIGURACIÓN GENERAL
 ========================================= */
 :root {
     --cuarzo-bg: #fdfdfd;      /* Fondo casi blanco */
@@ -13,11 +13,11 @@ body, html {
     height: 100%;
     background-color: var(--cuarzo-bg);
     font-family: 'Montserrat', sans-serif;
-    overflow: hidden; /* Evita que aparezca la barra de scroll */
+    overflow: hidden; /* Evita la barra de desplazamiento */
 }
 
 /* =========================================
-   2. HEADER LOGO ESTÁTICO
+   HEADER LOGO ESTÁTICO
 ========================================= */
 .header-static {
     position: absolute;
@@ -31,14 +31,14 @@ body, html {
     font-family: 'Merriweather', serif;
     color: var(--cuarzo-text);
     font-weight: 300;
-    font-size: 32px;
+    font-size: 28px;
     letter-spacing: 5px;
     margin: 0;
     text-transform: uppercase;
 }
 
 /* =========================================
-   3. CONTENEDOR DEL CARRUSEL
+   CONTENEDOR DEL CARRUSEL Y SLIDES
 ========================================= */
 .carousel-viewport {
     width: 100%;
@@ -51,98 +51,79 @@ body, html {
 
 .discipline-slide {
     position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
-    display: flex;
+    display: none; /* Oculto por defecto */
     justify-content: center;
     align-items: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.5s ease;
 }
 
 .discipline-slide.active {
-    opacity: 1;
-    visibility: visible;
+    display: flex; /* Se muestra solo el activo */
 }
 
 /* =========================================
-   4. TEXTO DE LA DISCIPLINA (POR DETRÁS)
+   TEXTO DE LA DISCIPLINA (POR DETRÁS)
 ========================================= */
 .discipline-name {
     font-family: 'Merriweather', serif;
-    font-size: 84px;
+    font-size: clamp(3rem, 8vw, 6rem); /* Se adapta al tamaño de pantalla */
     color: var(--cuarzo-text);
     text-align: center;
-    z-index: 5; /* Z-index menor que el bailarín para que quede atrás */
+    z-index: 5; /* Detrás del bailarín SVG */
     font-weight: 300;
     opacity: 0;
-    filter: blur(10px);
-    transform: scale(0.95);
+    filter: blur(15px);
+    position: absolute; /* Asegura que quede centrado estático */
 }
 
-/* Animación: el texto aparece recto y centrado tras el paso del bailarín */
+/* Animación del texto: aparece recto y centrado */
 .active .discipline-name {
-    animation: textReveal 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    animation-delay: 0.7s; /* Espera a que el bailarín pase por el medio */
+    animation: textReveal 1s ease forwards;
+    animation-delay: 0.8s; /* Espera a que el bailarín pase por el centro */
 }
 
 @keyframes textReveal {
-    0% { opacity: 0; filter: blur(10px); transform: scale(0.95); }
+    0% { opacity: 0; filter: blur(15px); transform: scale(0.95); }
     100% { opacity: 1; filter: blur(0px); transform: scale(1); }
 }
 
 /* =========================================
-   5. LA BAILARINA (EFECTO DE BARRIDO)
+   EL BAILARÍN DIBUJADO CON CÓDIGO (SVG)
 ========================================= */
-.dancer-sweep {
+.dancer-code {
     position: absolute;
-    top: 0;
-    left: -100vw; /* Inicia fuera de la pantalla por la izquierda */
-    width: 100vw;
-    height: 100vh;
-    z-index: 10; /* Z-index mayor para pasar por delante del texto */
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+    top: 50%;
+    left: -300px; /* Empieza fuera por la izquierda */
+    transform: translateY(-50%);
+    width: 400px; /* Tamaño del dibujo */
+    height: 400px;
+    z-index: 10; /* Por delante del texto */
     pointer-events: none;
-    /* Sombra opcional para darle profundidad al recorte */
-    filter: drop-shadow(20px 0 30px rgba(209, 184, 200, 0.3));
 }
 
-/* Animación: cruza la pantalla de izquierda a derecha */
-.active .dancer-sweep {
+/* Animación del barrido para el dibujo SVG */
+.active .dancer-code {
     animation: sweepPass 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 @keyframes sweepPass {
-    0% { left: -100vw; opacity: 0; }
-    30% { opacity: 1; }
-    70% { opacity: 1; }
+    0% { left: -400px; opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
     100% { left: 100vw; opacity: 0; }
 }
 
-/* ¡IMPORTANTE! 
-   Aquí debes poner la ruta de tus imágenes PNG sin fondo.
-   Sube tus imágenes a GitHub y reemplaza los nombres aquí.
-*/
-.ballet { background-image: url('clasico.png'); }
-.jazz { background-image: url('jazz.png'); }
-.contempo { background-image: url('contemporaneo.png'); }
-.heels { background-image: url('heels.png'); }
-
 /* =========================================
-   6. BOTONES DE NAVEGACIÓN
+   BOTONES DE NAVEGACIÓN
 ========================================= */
 .nav-controls {
     position: absolute;
-    bottom: 60px;
+    bottom: 50px;
     width: 100%;
     display: flex;
     justify-content: center;
-    gap: 40px;
+    gap: 30px;
     z-index: 100;
 }
 
@@ -150,16 +131,14 @@ body, html {
     background: none;
     border: 1px solid var(--cuarzo-accent);
     color: var(--cuarzo-text);
-    padding: 10px 25px;
+    padding: 12px 30px;
     cursor: pointer;
-    font-family: 'Montserrat', sans-serif;
     text-transform: uppercase;
     letter-spacing: 2px;
-    transition: all 0.3s ease;
-    font-size: 14px;
+    transition: 0.3s;
 }
 
 .nav-btn:hover {
     background-color: var(--cuarzo-accent);
-    color: #fff;
+    color: white;
 }
